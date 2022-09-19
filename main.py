@@ -53,6 +53,9 @@ def save_credentials():
             f.flush()
             os.fsync(f.fileno())
             f.close()
+        website_entry.delete(0, END)
+        username_entry.delete(0, END)
+        password_entry.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -79,6 +82,7 @@ email_username_label.grid(column=0, row=2)
 
 username_entry = Entry(width=50)
 username_entry.grid(column=1, row=2, columnspan=2)
+username_entry.insert(0, "Enter your email/username")
 
 password_label = Label(text="Password:", font=("Arial", 12))
 password_label.grid(column=0, row=3)
