@@ -44,7 +44,10 @@ def open_file():
 
 
 def save_credentials():
-    if messagebox.askyesno(title=website_entry.get(), message=f"Email: {username_entry.get()}\nPassword: {password_entry.get()}\nIs this ok?") is True:
+    if website_entry.get() == "" or username_entry.get() == "" or password_entry.get() == "":
+        messagebox.showinfo(title="Empty Fields", message="Please fill all the fields!")
+
+    elif messagebox.askyesno(title=website_entry.get(), message=f"Email: {username_entry.get()}\nPassword: {password_entry.get()}\nIs this ok?") is True:
         with open("password_file.txt", "a") as f:
             f.writelines(f"{website_entry.get()} | {username_entry.get()} | {password_entry.get()}\n")
             f.flush()
@@ -63,7 +66,7 @@ photo = PhotoImage(file="logo.png")
 
 canvas = Canvas(width=200, height=190)
 canvas.create_image(100, 95, image=photo)
-canvas.grid(column=1, row=0)
+canvas.grid(column=1, row=0, columnspan=1)
 
 website_label = Label(text="Website:", font=("Arial", 12))
 website_label.grid(column=0, row=1)
