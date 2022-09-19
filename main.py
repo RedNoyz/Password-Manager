@@ -57,6 +57,7 @@ window = Tk()
 window.title("MyPass")
 window.minsize(width=500, height=400)
 window.config(padx=50, pady=50)
+window.maxsize(width=500, height=400)
 
 photo = PhotoImage(file="logo.png")
 
