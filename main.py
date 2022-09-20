@@ -16,6 +16,8 @@ def search_password():
             password = passwords[website_entry.get()]['password']
     except FileNotFoundError:
         messagebox.showinfo(title="No passwords saved", message="No passwords saved!")
+    except KeyError:
+        messagebox.showinfo(title=website, message=f"{website} is not in the Saved passwords. Check your spelling and try again")
     else:
         messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
 
