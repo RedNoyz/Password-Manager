@@ -76,10 +76,10 @@ def save_credentials():
         else:
             with open("password_file.json", "w") as f:
                 json.dump(data, f, indent=4)
-
-        website_entry.delete(0, END)
-        username_entry.delete(0, END)
-        password_entry.delete(0, END)
+        finally:
+            website_entry.delete(0, END)
+            username_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
