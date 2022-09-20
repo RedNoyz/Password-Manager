@@ -11,13 +11,13 @@ def search_password():
     try:
         with open("password_file.json", "r") as f:
             passwords = json.load(f)
-            website = website_entry.get()
+            website = website_entry.get().title()
             username = passwords[website_entry.get()]['username']
             password = passwords[website_entry.get()]['password']
     except FileNotFoundError:
         messagebox.showinfo(title="No passwords saved", message="No passwords saved!")
     else:
-        messagebox.showinfo(title=website.title(), message=f"Username: {username}\nPassword: {password}")
+        messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
