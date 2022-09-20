@@ -1,14 +1,31 @@
 from tkinter import *
 from tkinter import messagebox
-import os
 import random
 import sv_ttk
+import json
+
+
+# ---------------------------- PASSWORD SEARCH ------------------------------- #
+def search_password():
+
+    try:
+        with open("password_file.json", "r") as f:
+            passwords = json.load(f)
+            website = website_entry.get()
+            username = passwords[website_entry.get()]['username']
+            password = passwords[website_entry.get()]['password']
+    except FileNotFoundError:
+        messagebox.showinfo(title="No passwords saved", message="No passwords saved!")
+    else:
+        messagebox.showinfo(title=website.title(), message=f"Username: {username}\nPassword: {password}")
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def generate_password():
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+               'R',
                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
@@ -37,22 +54,29 @@ def generate_password():
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-def open_file():
-    with open("password_file.txt", "a") as f:
-        f.writelines(f"{website_entry.get()} | {username_entry.get()} | {password_entry.get()}\n")
-        f.flush()
-
 
 def save_credentials():
+    new_data = {
+        website_entry.get(): {
+            "username": username_entry.get(),
+            "password": password_entry.get(),
+        }
+    }
+
     if website_entry.get() == "" or username_entry.get() == "" or password_entry.get() == "":
         messagebox.showinfo(title="Empty Fields", message="Please fill all the fields!")
+    else:
+        try:
+            with open("password_file.json", "r") as f:
+                data = json.load(f)
+                data.update(new_data)
+        except FileNotFoundError:
+            with open("password_file.json", "w") as f:
+                json.dump(new_data, f, indent=4)
+        else:
+            with open("password_file.json", "w") as f:
+                json.dump(data, f, indent=4)
 
-    elif messagebox.askyesno(title=website_entry.get(), message=f"Email: {username_entry.get()}\nPassword: {password_entry.get()}\nIs this ok?") is True:
-        with open("password_file.txt", "a") as f:
-            f.writelines(f"{website_entry.get()} | {username_entry.get()} | {password_entry.get()}\n")
-            f.flush()
-            os.fsync(f.fileno())
-            f.close()
         website_entry.delete(0, END)
         username_entry.delete(0, END)
         password_entry.delete(0, END)
@@ -74,14 +98,14 @@ canvas.grid(column=1, row=0, columnspan=1)
 website_label = Label(text="Website:", font=("Arial", 12))
 website_label.grid(column=0, row=1)
 
-website_entry = Entry(width=50)
-website_entry.grid(column=1, row=1, columnspan=2)
+website_entry = Entry(width=31)
+website_entry.grid(column=1, row=1, columnspan=1)
 
 email_username_label = Label(text="Email/Username:", font=("Arial", 12))
 email_username_label.grid(column=0, row=2)
 
-username_entry = Entry(width=50)
-username_entry.grid(column=1, row=2, columnspan=2)
+username_entry = Entry(width=31)
+username_entry.grid(column=1, row=2, columnspan=1)
 username_entry.insert(0, "Enter your email/username")
 
 password_label = Label(text="Password:", font=("Arial", 12))
@@ -99,6 +123,9 @@ save_password_label.grid(column=1, row=4)
 
 generate_password = Button(text="Generate Password", command=generate_password)
 generate_password.grid(column=2, row=3)
+
+search_button = Button(text="Search", command=search_password)
+search_button.grid(column=2, row=1)
 
 sv_ttk.set_theme("dark")
 
