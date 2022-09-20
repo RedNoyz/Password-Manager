@@ -69,11 +69,12 @@ def save_credentials():
         try:
             with open("password_file.json", "r") as f:
                 data = json.load(f)
-                data.update(new_data)
+
         except FileNotFoundError:
             with open("password_file.json", "w") as f:
                 json.dump(new_data, f, indent=4)
         else:
+            data.update(new_data)
             with open("password_file.json", "w") as f:
                 json.dump(data, f, indent=4)
         finally:
