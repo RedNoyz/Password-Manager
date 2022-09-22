@@ -7,19 +7,22 @@ import json
 
 # ---------------------------- PASSWORD SEARCH ------------------------------- #
 def search_password():
-
-    try:
-        with open("password_file.json", "r") as f:
-            passwords = json.load(f)
-            website = website_entry.get().title()
-            username = passwords[website_entry.get()]['username']
-            password = passwords[website_entry.get()]['password']
-    except FileNotFoundError:
-        messagebox.showinfo(title="No passwords saved", message="No passwords saved!")
-    except KeyError:
-        messagebox.showinfo(title=website, message=f"{website} is not in the Saved passwords. Check your spelling and try again")
+    if website_entry.get() != "":
+        messagebox.showinfo(title="No text", message="You need to input something to search!")
     else:
-        messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
+        try:
+            with open("password_file.json", "r") as f:
+                passwords = json.load(f)
+                website = website_entry.get().title()
+                username = passwords[website_entry.get()]['username']
+                password = passwords[website_entry.get()]['password']
+
+        except FileNotFoundError:
+            messagebox.showinfo(title="No passwords saved", message="No passwords saved!")
+        except KeyError:
+            messagebox.showinfo(title=website, message=f"{website} is not in the Saved passwords. Check your spelling and try again")
+        else:
+            messagebox.showinfo(title=website, message=f"Username: {username}\nPassword: {password}")
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
